@@ -1,4 +1,4 @@
-name: 'Terraform - Production'
+name: 'Terraform Infastrucutre Deployment with Checkov Scan'
 
 on:
   push:
@@ -31,13 +31,22 @@ jobs:
 
       # Run Checkov on each module directory
       - name: Checkov - Static Code Analysis on EC2 Module
-        run: checkov -d ec2 || true
+        run: checkov -d modules/ec2 || true
 
       - name: Checkov - Static Code Analysis on Route Table Module
-        run: checkov -d route_table || true
+        run: checkov -d modules/route_table || true
 
       - name: Checkov - Static Code Analysis on VPC Module
-        run: checkov -d vpc  || true
+        run: checkov -d modules/vpc || true
+
+      - name: Checkov - Static Code Analysis on NAT Gateway Module
+        run: checkov -d modules/nat_gateway || true
+
+      - name: Checkov - Static Code Analysis on Security Group Module
+        run: checkov -d modules/security_group || true
+
+      - name: Checkov - Static Code Analysis on Subnet Module
+        run: checkov -d modules/subnet || true
 
       # Initialize Terraform in the root directory
       - name: Terraform Init
