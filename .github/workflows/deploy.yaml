@@ -1,0 +1,53 @@
+name: 'Terraform - Production'
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_key }}
+  AWS_REGION: us-east-1
+
+jobs:
+  build:
+    name: Build and Deploy Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Install Checkov
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install checkov
+
+      # Run Checkov on each module directory
+      - name: Checkov - Static Code Analysis on EC2 Module
+        run: checkov -d ec2 || true
+
+      - name: Checkov - Static Code Analysis on Route Table Module
+        run: checkov -d route_table || true
+
+      - name: Checkov - Static Code Analysis on VPC Module
+        run: checkov -d vpc  || true
+
+      # Initialize Terraform in the root directory
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply --auto-approve

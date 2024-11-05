@@ -1,0 +1,6 @@
+**/.terraform/*
+*.lock.hcl
+.terraform/
+.terraform.lock.hcl
+Lab2.docx
+terraform.tfstate
