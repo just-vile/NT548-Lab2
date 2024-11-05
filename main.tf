@@ -25,12 +25,11 @@ module "nat_gateway" {
   internet_gateway_id = aws_internet_gateway.igw.id
 }
 
-# Gọi module Route Table
 module "route_table" {
   source            = "./modules/route_table"
   vpc_id            = module.vpc.vpc_id
   internet_gateway_id = aws_internet_gateway.igw.id
-  nat_gateway_id    = module.nat_gateway.nat_gateway_id  # Truyền NAT Gateway ID
+  nat_gateway_id    = module.nat_gateway.nat_gateway_id  
   public_subnet_id  = module.subnet.public_subnet_id
   private_subnet_id = module.subnet.private_subnet_id
 }
@@ -38,7 +37,7 @@ module "route_table" {
 module "security_group" {
   source               = "./modules/security_group"
   vpc_id               = module.vpc.vpc_id
-  allowed_ssh_cidr     = "0.0.0.0/0"  # Hoặc IP cụ thể
+  allowed_ssh_cidr     = "104.28.156.152/32"  
   public_security_group_id = module.security_group.public_security_group_id
 }
 

@@ -1,4 +1,3 @@
-# Route Table cho Public Subnet
 resource "aws_route_table" "public_route_table" {
   vpc_id = var.vpc_id
   route {
@@ -10,12 +9,11 @@ resource "aws_route_table" "public_route_table" {
   }
 }
 
-# Route Table cho Private Subnet
 resource "aws_route_table" "private_route_table" {
   vpc_id = var.vpc_id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = var.nat_gateway_id  # Cập nhật để sử dụng NAT Gateway
+    nat_gateway_id = var.nat_gateway_id  
   }
   tags = {
     Name = "Private Route Table"

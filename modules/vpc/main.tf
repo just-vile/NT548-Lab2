@@ -7,7 +7,6 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
-# Lấy Security Group mặc định của VPC
 data "aws_security_group" "default_sg" {
   filter {
     name   = "vpc-id"
@@ -20,7 +19,6 @@ data "aws_security_group" "default_sg" {
   }
 }
 
-# Chặn mọi lưu lượng vào
 resource "aws_security_group_rule" "default_sg_restrict_inbound" {
   type              = "ingress"
   from_port         = 0
@@ -30,7 +28,6 @@ resource "aws_security_group_rule" "default_sg_restrict_inbound" {
   security_group_id = data.aws_security_group.default_sg.id
 }
 
-# Chặn mọi lưu lượng ra
 resource "aws_security_group_rule" "default_sg_restrict_outbound" {
   type              = "egress"
   from_port         = 0
