@@ -53,7 +53,10 @@ jobs:
 
       # Initialize Terraform in the root directory
       - name: Download tfplan file from S3
-        run: aws s3 cp s3://group21-secret-bucket/tfplan .
+        run: |
+          aws s3 cp s3://group21-secret-bucket/tfplan .
+          aws s3 cp s3://group21-secret-bucket/.terraform.lock.hcl .
+        
 
       - name: Terraform Apply
         id: apply
