@@ -12,6 +12,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_key }}
   AWS_REGION: us-east-1
+  TF_VAR_region: us-east-1
 
 jobs:
   build:
@@ -49,14 +50,9 @@ jobs:
         run: checkov -d modules/subnet || true
 
       # Initialize Terraform in the root directory
-      - name: Terraform Init
-        id: init
-        run: terraform init
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan
+      - name: Download tfplan file from S3
+        run: aws s3 cp s3://group21-secret-bucket/tfplan
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply --auto-approve
+        run: terraform apply tfplan

@@ -13,20 +13,18 @@ resource "aws_route_table" "private_route_table" {
   vpc_id = var.vpc_id
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = var.nat_gateway_id  
+    nat_gateway_id = var.nat_gateway_id  # Cập nhật để sử dụng NAT Gateway
   }
   tags = {
     Name = "Private Route Table"
   }
 }
 
-# Liên kết Route Table với Public Subnet
 resource "aws_route_table_association" "public_subnet_association" {
   subnet_id      = var.public_subnet_id
   route_table_id = aws_route_table.public_route_table.id
 }
 
-# Liên kết Route Table với Private Subnet
 resource "aws_route_table_association" "private_subnet_association" {
   subnet_id      = var.private_subnet_id
   route_table_id = aws_route_table.private_route_table.id
