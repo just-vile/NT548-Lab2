@@ -24,8 +24,6 @@ jobs:
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.9.6
 
       - name: Install Checkov
         run: |
@@ -34,30 +32,32 @@ jobs:
 
       # Run Checkov on each module directory
       - name: Checkov - Static Code Analysis on EC2 Module
-        run: checkov -d modules/ec2 || true
+        run: checkov -d modules/ec2 
 
       - name: Checkov - Static Code Analysis on Route Table Module
-        run: checkov -d modules/route_table || true
+        run: checkov -d modules/route_table 
 
       - name: Checkov - Static Code Analysis on VPC Module
-        run: checkov -d modules/vpc || true
+        run: checkov -d modules/vpc 
 
       - name: Checkov - Static Code Analysis on NAT Gateway Module
-        run: checkov -d modules/nat_gateway || true
+        run: checkov -d modules/nat_gateway 
 
       - name: Checkov - Static Code Analysis on Security Group Module
-        run: checkov -d modules/security_group || true
+        run: checkov -d modules/security_group 
 
       - name: Checkov - Static Code Analysis on Subnet Module
-        run: checkov -d modules/subnet || true
+        run: checkov -d modules/subnet 
 
       # Initialize Terraform in the root directory
       - name: Download tfplan file from S3
-        run: |
-          aws s3 cp s3://group21-secret-bucket/tfplan .
-          aws s3 cp s3://group21-secret-bucket/.terraform.lock.hcl .
-        
+        id: init
+        run: terraform init 
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -out=tfplan
 
       - name: Terraform Apply
         id: apply
-        run: terraform apply tfplan
+        run: terraform apply --auto-approve tfplan

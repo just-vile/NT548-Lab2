@@ -4,3 +4,4 @@
 .terraform.lock.hcl
 Lab2.docx
 terraform.tfstate
+terraform.tfstate.backup
