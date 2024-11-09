@@ -50,7 +50,7 @@ jobs:
         run: checkov -d modules/subnet 
 
       # Initialize Terraform in the root directory
-      - name: Download tfplan file from S3
+      - name: Terraform init
         id: init
         run: terraform init 
 
